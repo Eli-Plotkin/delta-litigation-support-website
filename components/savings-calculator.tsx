@@ -1,20 +1,20 @@
 'use client'
 
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
-// Assumptions surfaced to the user in the panel below the results
+// Payroll-side assumption, surfaced to the user in the panel below the results.
+// Per-case service fees deliberately live server-side in /api/calculator —
+// pricing isn't public yet, so it must not ship in this client bundle.
 const BURDEN_MULTIPLIER = 1.25 // payroll taxes, benefits, software seats, overhead
 
-// Per-case service fees. Records retrieval is variable/pass-through, so it is
-// excluded from the modeled mix and noted in the assumptions panel instead.
 const SERVICE_MIX = [
-  { key: 'intake', label: 'Intake & Onboarding', fee: 150 },
-  { key: 'treatment', label: 'Treatment Coordination', fee: 400 },
-  { key: 'chronology', label: 'Medical Chronology', fee: 350 },
-  { key: 'demand', label: 'Demand Preparation', fee: 1000 },
-  { key: 'lien', label: 'Lien Resolution', fee: 300 },
-  { key: 'settlement', label: 'Settlement Administration', fee: 300 },
+  { key: 'intake', label: 'Intake & Onboarding' },
+  { key: 'treatment', label: 'Treatment Coordination' },
+  { key: 'chronology', label: 'Medical Chronology' },
+  { key: 'demand', label: 'Demand Preparation' },
+  { key: 'lien', label: 'Lien Resolution' },
+  { key: 'settlement', label: 'Settlement Administration' },
 ] as const
 
 type ServiceKey = (typeof SERVICE_MIX)[number]['key']
@@ -69,21 +69,43 @@ export function SavingsCalculator() {
     lien: true,
     settlement: true,
   })
+  const [annualDelta, setAnnualDelta] = useState<number | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
 
-  const perCase = useMemo(
-    () => SERVICE_MIX.reduce((sum, s) => sum + (mix[s.key] ? s.fee : 0), 0),
-    [mix]
-  )
+  // Delta cost is computed server-side; debounce slider churn.
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      abortRef.current?.abort()
+      const controller = new AbortController()
+      abortRef.current = controller
+      try {
+        const res = await fetch('/api/calculator', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            casesPerMonth: inputs.casesPerMonth,
+            mix: SERVICE_MIX.filter((s) => mix[s.key]).map((s) => s.key),
+          }),
+          signal: controller.signal,
+        })
+        if (res.ok) {
+          const data = (await res.json()) as { annualDelta: number }
+          setAnnualDelta(data.annualDelta)
+        }
+      } catch {
+        // keep showing the previous estimate on transient failures
+      }
+    }, 200)
+    return () => clearTimeout(timer)
+  }, [inputs.casesPerMonth, mix])
 
-  const results = useMemo(() => {
+  const payroll = useMemo(() => {
     const headcount = inputs.caseManagers + inputs.intakeStaff + inputs.demandWriters
-    const annualPayroll = Math.round(headcount * inputs.avgSalary * BURDEN_MULTIPLIER)
-    const annualDelta = inputs.casesPerMonth * 12 * perCase
-    const savings = annualPayroll - annualDelta
-    return { headcount, annualPayroll, annualDelta, savings }
-  }, [inputs, perCase])
+    return { headcount, annual: Math.round(headcount * inputs.avgSalary * BURDEN_MULTIPLIER) }
+  }, [inputs])
 
-  const maxBar = Math.max(results.annualPayroll, results.annualDelta, 1)
+  const savings = annualDelta === null ? null : payroll.annual - annualDelta
+  const maxBar = Math.max(payroll.annual, annualDelta ?? 0, 1)
 
   return (
     <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
@@ -152,25 +174,27 @@ export function SavingsCalculator() {
           <dl className="mt-8 space-y-7">
             <div>
               <dt className="text-sm text-slate-ink">
-                Estimated annual payroll · {results.headcount}{' '}
-                {results.headcount === 1 ? 'employee' : 'employees'}
+                Estimated annual payroll · {payroll.headcount}{' '}
+                {payroll.headcount === 1 ? 'employee' : 'employees'}
               </dt>
-              <dd className="font-display mt-1 text-4xl">{money(results.annualPayroll)}</dd>
+              <dd className="font-display mt-1 text-4xl">{money(payroll.annual)}</dd>
               <div className="mt-2 h-2 w-full bg-paper-2">
                 <div
                   className="h-2 bg-slate-ink transition-all duration-500"
-                  style={{ width: `${(results.annualPayroll / maxBar) * 100}%` }}
+                  style={{ width: `${(payroll.annual / maxBar) * 100}%` }}
                 />
               </div>
             </div>
 
             <div>
               <dt className="text-sm text-slate-ink">Estimated Delta model cost</dt>
-              <dd className="font-display mt-1 text-4xl">{money(results.annualDelta)}</dd>
+              <dd className="font-display mt-1 text-4xl">
+                {annualDelta === null ? '—' : money(annualDelta)}
+              </dd>
               <div className="mt-2 h-2 w-full bg-paper-2">
                 <div
                   className="h-2 bg-brass transition-all duration-500"
-                  style={{ width: `${(results.annualDelta / maxBar) * 100}%` }}
+                  style={{ width: `${((annualDelta ?? 0) / maxBar) * 100}%` }}
                 />
               </div>
             </div>
@@ -179,16 +203,18 @@ export function SavingsCalculator() {
 
             <div>
               <dt className="text-sm text-slate-ink">
-                {results.savings >= 0 ? 'Potential annual savings' : 'Estimated annual difference'}
+                {savings === null || savings >= 0
+                  ? 'Potential annual savings'
+                  : 'Estimated annual difference'}
               </dt>
               <dd
                 className={`font-display mt-1 text-5xl ${
-                  results.savings >= 0 ? 'text-brass-deep' : 'text-ink'
+                  savings !== null && savings >= 0 ? 'text-brass-deep' : 'text-ink'
                 }`}
               >
-                {money(Math.abs(results.savings))}
+                {savings === null ? '—' : money(Math.abs(savings))}
               </dd>
-              {results.savings < 0 && (
+              {savings !== null && savings < 0 && (
                 <p className="mt-3 text-sm leading-relaxed text-slate-ink">
                   At this volume and mix, Delta costs more than your current payroll on a gross
                   basis — but it converts fixed overhead into per-file services that scale down as
