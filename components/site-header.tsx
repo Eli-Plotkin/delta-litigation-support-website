@@ -73,7 +73,7 @@ export function SiteHeader() {
 
       {open && (
         <nav
-          className="fixed inset-x-0 top-[72px] bottom-0 z-40 flex flex-col gap-2 bg-ink px-6 pt-8 xl:hidden"
+          className="absolute inset-x-0 top-full z-40 flex h-[calc(100dvh-72px)] flex-col gap-2 overflow-y-auto bg-ink px-6 pt-8 xl:hidden"
           aria-label="Mobile"
         >
           {NAV.map((item, i) => (
