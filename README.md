@@ -28,10 +28,22 @@ lib/
   services.ts               # Single source of truth for the seven service disciplines
 ```
 
+## Environment
+
+The assessment form posts to `app/api/assessment/route.ts`, which emails submissions via Resend. Copy `.env.example` to `.env.local` (and mirror in Vercel) and set:
+
+```
+RESEND_API_KEY           # server-only — from resend.com/api-keys
+ASSESSMENT_TO_EMAIL      # inbox that receives form submissions
+NOTIFICATION_FROM_EMAIL  # "Name <email>" on a Resend-verified domain; omit for onboarding@resend.dev (testing)
+```
+
+Without these set, the route returns 503 and the form shows a direct-email fallback.
+
 ## Before launch
 
 1. **`lib/site.ts`** — replace `url` and `contactEmail` with production values.
-2. **Contact form** — currently opens the visitor's email client (mailto). Wire to a real backend (e.g. Resend + an API route, or a form service) for production.
+2. **Email delivery** — set the env vars above; verify the sending domain in Resend for production.
 3. **Cost Recovery page** (`app/cost-recovery/page.tsx`) — have counsel review the copy before launch, per the website strategy doc.
 4. **Calculator assumptions** (`components/savings-calculator.tsx`) — `BURDEN_MULTIPLIER` (1.25) and `DELTA_FULL_STACK_PER_CASE` ($2,500) are the two constants behind the estimate.
 5. **Testimonials** — intentionally omitted until real client quotes are approved (targets per strategy doc: PMR, Edward Law Group, Bush & Bush, Kelly Law).

@@ -3,37 +3,44 @@
 import { useState } from 'react'
 import { SITE } from '@/lib/site'
 
-export function AssessmentForm() {
-  const [sent, setSent] = useState(false)
+type Status = 'idle' | 'sending' | 'sent' | 'error'
 
-  function handleSubmit(e: { preventDefault(): void; currentTarget: HTMLFormElement }) {
+export function AssessmentForm() {
+  const [status, setStatus] = useState<Status>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  async function handleSubmit(e: { preventDefault(): void; currentTarget: HTMLFormElement }) {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
-    const subject = `Operational assessment request — ${data.get('firm')}`
-    const body = [
-      `Name: ${data.get('name')}`,
-      `Firm: ${data.get('firm')}`,
-      `Email: ${data.get('email')}`,
-      `Phone: ${data.get('phone')}`,
-      `New cases per month: ${data.get('volume')}`,
-      '',
-      `${data.get('message')}`,
-    ].join('\n')
-    window.location.href = `mailto:${SITE.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    setSent(true)
+    setStatus('sending')
+    setErrorMessage('')
+
+    try {
+      const res = await fetch('/api/assessment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(data.entries())),
+      })
+      if (res.ok) {
+        setStatus('sent')
+        return
+      }
+      const payload = (await res.json().catch(() => null)) as { error?: string } | null
+      setErrorMessage(payload?.error ?? 'Something went wrong sending your request.')
+      setStatus('error')
+    } catch {
+      setErrorMessage('Something went wrong sending your request.')
+      setStatus('error')
+    }
   }
 
-  if (sent) {
+  if (status === 'sent') {
     return (
       <div className="border border-[var(--color-line)] bg-white p-10 text-center">
-        <p className="font-display text-3xl">Almost there.</p>
+        <p className="font-display text-3xl">Request received.</p>
         <p className="mt-4 text-sm leading-relaxed text-slate-ink">
-          Your email client should have opened with your assessment request. Just hit send —
-          we&rsquo;ll reply within one business day. If it didn&rsquo;t open, email us directly at{' '}
-          <a href={`mailto:${SITE.contactEmail}`} className="text-brass-deep underline">
-            {SITE.contactEmail}
-          </a>
-          .
+          Thanks — your assessment request is in our inbox. We&rsquo;ll reply within one business
+          day to schedule your 15 minutes.
         </p>
       </div>
     )
@@ -116,11 +123,33 @@ export function AssessmentForm() {
         />
       </div>
 
-      <button type="submit" className="btn btn-brass w-full justify-center sm:w-auto">
-        Request My Assessment
-        <span className="btn-arrow" aria-hidden="true">
-          →
-        </span>
+      {/* Honeypot — hidden from humans, bots fill it and get silently dropped */}
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" tabIndex={-1} autoComplete="off" />
+      </div>
+
+      {status === 'error' && (
+        <p className="border border-[var(--color-line)] bg-paper-2/60 p-4 text-sm leading-relaxed text-slate-ink">
+          {errorMessage} You can also reach us directly at{' '}
+          <a href={`mailto:${SITE.contactEmail}`} className="text-brass-deep underline">
+            {SITE.contactEmail}
+          </a>
+          .
+        </p>
+      )}
+
+      <button
+        type="submit"
+        disabled={status === 'sending'}
+        className="btn btn-brass w-full justify-center disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+      >
+        {status === 'sending' ? 'Sending…' : 'Request My Assessment'}
+        {status !== 'sending' && (
+          <span className="btn-arrow" aria-hidden="true">
+            →
+          </span>
+        )}
       </button>
     </form>
   )
