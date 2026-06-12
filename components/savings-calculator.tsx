@@ -207,12 +207,16 @@ export function SavingsCalculator() {
             </div>
           </dl>
 
-          <p className="mt-8 border-t border-[var(--color-line)] pt-6 text-sm leading-relaxed text-slate-ink">
-            This comparison is gross cost only. Delta&rsquo;s per-file service model is also
-            designed to produce the documentation firms use to evaluate case-expense treatment —
-            see{' '}
+          <p className="mt-8 border-t border-[var(--color-line)] pt-6 text-xs leading-relaxed text-slate-ink">
+            This calculator compares staffing costs only. It does not estimate, assume, or project
+            any recovery of litigation support expenses. Whether any expense may be treated as
+            case-specific depends on applicable law, ethics rules, and your firm&rsquo;s engagement
+            agreements, and should be evaluated by your firm and its counsel.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-slate-ink">
+            Curious how per-file invoicing supports that evaluation?{' '}
             <Link href="/cost-recovery" className="text-brass-deep underline">
-              the cost recovery framework
+              Explore the cost recovery framework
             </Link>
             .
           </p>
@@ -240,10 +244,7 @@ export function SavingsCalculator() {
               Medical records &amp; bills retrieval is billed at cost as a variable pass-through
               and isn&rsquo;t included in the modeled mix.
             </li>
-            <li>
-              These figures are estimates for discussion purposes only — not a quote and not a
-              representation of recoverable costs.
-            </li>
+            <li>These figures are estimates for discussion purposes only — not a quote.</li>
           </ul>
         </div>
       </div>

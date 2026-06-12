@@ -19,6 +19,7 @@ const TRADITIONAL = ['Hire staff', 'Train staff', 'Manage staff', 'Replace staff
 const DELTA_MODEL = [
   'White-labeled support team',
   'Defined deliverables on every file',
+  'Per-file invoicing structured for expense evaluation',
   'Reduced overhead',
   'Increased scalability',
   'No recruiting',
@@ -217,6 +218,21 @@ export default function HomePage() {
             </div>
           </Reveal>
         </div>
+        <Reveal delay={200}>
+          <p className="mx-auto mt-12 max-w-3xl text-center text-base leading-relaxed text-slate-ink">
+            Because every Delta service is engaged on a specific file, documented with identifiable
+            work product, and invoiced per file, your firm gains something a salaried employee can
+            never provide: a documented basis to evaluate expense treatment with your own counsel.
+          </p>
+          <p className="mt-5 text-center">
+            <Link
+              href="/cost-recovery"
+              className="eyebrow inline-flex items-center gap-2 text-brass-deep transition-colors hover:text-ink"
+            >
+              Explore the Cost Recovery Framework <span aria-hidden="true">→</span>
+            </Link>
+          </p>
+        </Reveal>
       </section>
 
       {/* ---------- Built for PI firms ---------- */}

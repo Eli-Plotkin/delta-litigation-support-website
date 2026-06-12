@@ -76,9 +76,6 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                   </li>
                 ))}
               </ul>
-              <p className="mt-6 text-sm leading-relaxed text-slate-ink">
-                Every engagement produces identifiable work product, documented on a per-file basis.
-              </p>
             </Reveal>
           </div>
 
@@ -105,6 +102,34 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             </Reveal>
           </div>
         </div>
+      </section>
+
+      {/* Per-file structure module — identical across all seven service pages */}
+      <section className="mx-auto max-w-6xl px-6 pb-20 sm:pb-28">
+        <Reveal>
+          <div className="delta-field bg-ink p-10 text-paper sm:p-12">
+            <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+              <div className="lg:col-span-8">
+                <h2 className="font-display text-3xl leading-snug sm:text-4xl">
+                  Engaged per file. Documented per file. <em className="text-brass">Invoiced per file.</em>
+                </h2>
+                <p className="mt-4 max-w-2xl text-base leading-relaxed text-mist">
+                  This service is engaged on a specific case, performed against defined
+                  deliverables, and supported by identifiable work product. Your firm receives a
+                  per-file invoice for every engagement — never a lump-sum staffing bill.
+                </p>
+              </div>
+              <div className="lg:col-span-4 lg:text-right">
+                <Link
+                  href="/cost-recovery"
+                  className="eyebrow inline-flex items-center gap-2 text-brass transition-colors hover:text-paper"
+                >
+                  How this supports cost recovery evaluation <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* White-label note */}

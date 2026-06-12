@@ -11,8 +11,9 @@ export function CtaBand() {
             What would it cost to eliminate half your pre&#8209;litigation payroll?
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-mist">
-            Schedule a 15-minute operational assessment. We&rsquo;ll walk your current caseload,
-            your staffing, and show you exactly what the Delta model would look like for your firm.
+            Schedule a 15-minute operational assessment. We&rsquo;ll walk through your caseload,
+            your staffing, and your current engagement agreements, and show you what the Delta
+            model and documentation framework would look like for your firm.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/contact" className="btn btn-brass">

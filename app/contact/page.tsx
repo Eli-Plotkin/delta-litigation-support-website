@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const STEPS = [
   {
     title: 'A 15-minute call',
-    desc: 'We walk through your current caseload, staffing, and where files get stuck.',
+    desc: 'We walk through your caseload, your staffing, your engagement agreements, and where files get stuck.',
   },
   {
     title: 'An operational snapshot',

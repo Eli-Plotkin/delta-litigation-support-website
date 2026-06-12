@@ -10,6 +10,21 @@ export const metadata: Metadata = {
     'Delta’s service model is built around documented litigation support activities tied to individual files — with the documentation framework firms need to evaluate expense treatment under applicable law.',
 }
 
+const FAQ = [
+  {
+    q: 'Can we bill these services to our clients as case expenses?',
+    a: 'That’s a determination only your firm can make, together with your counsel, based on your jurisdiction’s rules and your engagement agreements. What Delta provides is the structure that makes the evaluation possible: defined services tied to specific files, documented work product, and per-file invoices. Without that structure, there’s nothing to evaluate.',
+  },
+  {
+    q: 'Does Delta guarantee that these expenses are recoverable?',
+    a: 'No, and you should be skeptical of any vendor who does. Expense treatment varies by state, by ethics authority, and by the language in each client engagement. Delta’s role is to deliver the services and the paper trail. The determination belongs to your firm.',
+  },
+  {
+    q: 'How is this different from billing clients for staff time?',
+    a: 'A salaried case manager’s time is general overhead spread across your whole caseload, with no file-level record of work performed. Delta services are engaged on individual files with defined deliverables and itemized invoices from a third-party provider. That distinction is the foundation of the entire framework, and it’s why the structure exists.',
+  },
+]
+
 const FRAMEWORK = [
   {
     title: 'State-by-state legal analysis',
@@ -148,6 +163,41 @@ export default function CostRecoveryPage() {
                 Built to withstand scrutiny — <em className="text-brass">file by file.</em>
               </p>
             </div>
+          </div>
+          <Reveal>
+            <p className="mt-8 max-w-3xl text-sm leading-relaxed text-slate-ink">
+              Sample language, state-by-state analysis, and ethics summaries are shared with
+              engaged firms for review by the firm&rsquo;s own counsel — we don&rsquo;t publish
+              them publicly.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="mx-auto max-w-6xl px-6 pt-24 sm:pt-32">
+        <div className="grid gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-4">
+            <Reveal>
+              <p className="eyebrow text-brass-deep">Straight answers</p>
+              <h2 className="font-display mt-6 text-4xl leading-[1.08] sm:text-5xl">
+                The questions partners <em>actually ask.</em>
+              </h2>
+            </Reveal>
+          </div>
+          <div className="lg:col-span-7 lg:col-start-6">
+            <ul className="divide-y divide-[var(--color-line)] border-y border-[var(--color-line)]">
+              {FAQ.map((item, i) => (
+                <li key={item.q}>
+                  <Reveal delay={i * 80}>
+                    <div className="py-8">
+                      <h3 className="font-display text-2xl leading-snug">{item.q}</h3>
+                      <p className="mt-4 text-base leading-relaxed text-slate-ink">{item.a}</p>
+                    </div>
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
