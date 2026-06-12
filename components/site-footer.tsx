@@ -41,6 +41,14 @@ export function SiteFooter() {
             <p className="eyebrow text-mist">Company</p>
             <ul className="mt-5 space-y-3">
               <li>
+                <Link
+                  href="/attorney-funding"
+                  className="text-sm text-paper/80 transition-colors hover:text-brass"
+                >
+                  Attorney Funding
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className="text-sm text-paper/80 transition-colors hover:text-brass">
                   About
                 </Link>

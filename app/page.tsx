@@ -288,24 +288,38 @@ export default function HomePage() {
           <div className="lg:col-span-5 lg:col-start-8">
             <Reveal delay={120}>
               <div className="space-y-px border border-[var(--color-line)] bg-[var(--color-line)]">
-                {[
-                  ['Delta Legal Funding', 'Capital for plaintiffs and firms'],
-                  ['Delta Litigation Support', 'Operations from intake to settlement'],
-                  ['Delta Demands', 'Attorney-ready demand packages'],
-                ].map(([name, desc], i) => (
-                  <div
-                    key={name}
-                    className={`flex items-center gap-5 p-6 ${i === 1 ? 'bg-ink text-paper' : 'bg-paper'}`}
-                  >
-                    <DeltaMark
-                      className={`h-8 w-8 shrink-0 ${i === 1 ? 'text-paper' : 'text-ink'}`}
-                    />
-                    <div>
-                      <p className="font-display text-xl">{name}</p>
-                      <p className={`text-sm ${i === 1 ? 'text-mist' : 'text-slate-ink'}`}>{desc}</p>
-                    </div>
+                <Link
+                  href="/attorney-funding"
+                  className="group flex items-center gap-5 bg-paper p-6 transition-colors hover:bg-paper-2"
+                >
+                  <DeltaMark className="h-8 w-8 shrink-0 text-ink" />
+                  <div>
+                    <p className="font-display text-xl">Delta Legal Funding</p>
+                    <p className="text-sm text-slate-ink">
+                      Plaintiff funding — and case-by-case attorney funding
+                    </p>
                   </div>
-                ))}
+                  <span
+                    className="ml-auto text-brass-deep opacity-0 transition-opacity group-hover:opacity-100"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
+                </Link>
+                <div className="flex items-center gap-5 bg-ink p-6 text-paper">
+                  <DeltaMark className="h-8 w-8 shrink-0 text-paper" />
+                  <div>
+                    <p className="font-display text-xl">Delta Litigation Support</p>
+                    <p className="text-sm text-mist">Operations from intake to settlement</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-5 bg-paper p-6">
+                  <DeltaMark className="h-8 w-8 shrink-0 text-ink" />
+                  <div>
+                    <p className="font-display text-xl">Delta Demands</p>
+                    <p className="text-sm text-slate-ink">Attorney-ready demand packages</p>
+                  </div>
+                </div>
               </div>
             </Reveal>
           </div>

@@ -7,8 +7,9 @@ import { Wordmark } from './delta-mark'
 
 const NAV = [
   { href: '/services', label: 'Services' },
+  { href: '/attorney-funding', label: 'Attorney Funding' },
   { href: '/cost-recovery', label: 'Cost Recovery' },
-  { href: '/savings-calculator', label: 'Savings Calculator' },
+  { href: '/savings-calculator', label: 'Calculator' },
   { href: '/about', label: 'About' },
 ]
 
@@ -34,7 +35,7 @@ export function SiteHeader() {
           <Wordmark light />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-8 xl:flex" aria-label="Primary">
           {NAV.map((item) => {
             const active = pathname === item.href || pathname.startsWith(item.href + '/')
             return (
@@ -57,7 +58,7 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
+          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 xl:hidden"
           aria-expanded={open}
           aria-label={open ? 'Close menu' : 'Open menu'}
         >
@@ -72,7 +73,7 @@ export function SiteHeader() {
 
       {open && (
         <nav
-          className="fixed inset-x-0 top-[72px] bottom-0 z-40 flex flex-col gap-2 bg-ink px-6 pt-8 lg:hidden"
+          className="fixed inset-x-0 top-[72px] bottom-0 z-40 flex flex-col gap-2 bg-ink px-6 pt-8 xl:hidden"
           aria-label="Mobile"
         >
           {NAV.map((item, i) => (

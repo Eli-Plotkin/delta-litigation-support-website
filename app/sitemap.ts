@@ -3,7 +3,15 @@ import { SERVICES } from '@/lib/services'
 import { SITE } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages = ['', '/services', '/cost-recovery', '/savings-calculator', '/about', '/contact']
+  const staticPages = [
+    '',
+    '/services',
+    '/attorney-funding',
+    '/cost-recovery',
+    '/savings-calculator',
+    '/about',
+    '/contact',
+  ]
   return [
     ...staticPages.map((path) => ({
       url: `${SITE.url}${path}`,
