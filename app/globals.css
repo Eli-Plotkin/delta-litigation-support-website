@@ -13,8 +13,11 @@
   --color-mist: #9db0c4;
   --color-line: rgba(10, 26, 47, 0.12);
   --color-line-light: rgba(250, 247, 241, 0.14);
+}
 
-  /* Typography */
+/* Fonts reference next/font variables, so they must be declared inline —
+   plain @theme silently drops var() references and falls back to defaults. */
+@theme inline {
   --font-display: var(--font-instrument-serif), Georgia, serif;
   --font-sans: var(--font-archivo), system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;
@@ -32,7 +35,7 @@ html {
 body {
   background: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-archivo), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -40,13 +43,13 @@ body {
 /* ---------- Editorial primitives ---------- */
 
 .font-display {
-  font-family: var(--font-display);
+  font-family: var(--font-instrument-serif), Georgia, serif;
   font-weight: 400;
   letter-spacing: -0.01em;
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.22em;
@@ -57,7 +60,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.625rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -172,7 +175,7 @@ body {
 /* ---------- Forms ---------- */
 
 .field-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.18em;
