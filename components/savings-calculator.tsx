@@ -129,26 +129,18 @@ export function SavingsCalculator() {
           <ul className="mt-5 divide-y divide-[var(--color-line)] border-y border-[var(--color-line)]">
             {SERVICE_MIX.map((s) => (
               <li key={s.key}>
-                <label className="flex cursor-pointer items-center justify-between gap-4 py-3.5">
-                  <span className="flex items-center gap-3">
-                    <input
-                      type="checkbox"
-                      checked={mix[s.key]}
-                      onChange={(e) => setMix({ ...mix, [s.key]: e.target.checked })}
-                      className="h-4 w-4 accent-[var(--color-brass-deep)]"
-                    />
-                    <span className="text-sm">{s.label}</span>
-                  </span>
-                  <span className="font-mono text-xs text-slate-ink">
-                    {money(s.fee)} <span className="text-slate-ink/60">/ case</span>
-                  </span>
+                <label className="flex cursor-pointer items-center gap-3 py-3.5">
+                  <input
+                    type="checkbox"
+                    checked={mix[s.key]}
+                    onChange={(e) => setMix({ ...mix, [s.key]: e.target.checked })}
+                    className="h-4 w-4 accent-[var(--color-brass-deep)]"
+                  />
+                  <span className="text-sm">{s.label}</span>
                 </label>
               </li>
             ))}
           </ul>
-          <p className="mt-3 text-right font-mono text-xs text-slate-ink">
-            Selected mix: <span className="font-medium text-ink">{money(perCase)} per case</span>
-          </p>
         </div>
       </div>
 
@@ -237,8 +229,8 @@ export function SavingsCalculator() {
               benefits, and overhead on top of base salary.
             </li>
             <li>
-              Delta cost assumes the selected service mix ({money(perCase)} per case) on every new
-              case. In practice, cases that resolve early consume fewer services.
+              Delta cost assumes the selected service mix on every new case. In practice, cases
+              that resolve early consume fewer services.
             </li>
             <li>
               Medical records &amp; bills retrieval is billed at cost as a variable pass-through

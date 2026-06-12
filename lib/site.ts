@@ -3,8 +3,7 @@ export const SITE = {
   tagline: 'Your entire pre-litigation department. Fully managed. Fully white-labeled.',
   description:
     'Delta Litigation Support helps plaintiff law firms reduce overhead, improve case progression, and scale operations through a complete suite of litigation support services — from intake through settlement.',
-  // TODO: replace with the production domain before launch
-  url: 'https://deltalitigationsupport.com',
+  url: 'https://deltalit.com',
   contactEmail: 'LP@deltalegalfunding.com',
   parentBrand: 'Delta Legal Funding',
   parentUrl: 'https://deltalegalfunding.com',

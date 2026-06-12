@@ -42,7 +42,7 @@ Without these set, the route returns 503 and the form shows a direct-email fallb
 
 ## Before launch
 
-1. **`lib/site.ts`** — replace `url` with the production domain once registered (contact email is set: LP@deltalegalfunding.com).
+1. **`lib/site.ts`** — production values set: deltalit.com / LP@deltalegalfunding.com.
 2. **Email delivery** — set the env vars above and send one test submission end-to-end.
 3. **Cost Recovery page** (`app/cost-recovery/page.tsx`) — have counsel review the copy before launch, per the website strategy doc.
 4. **Calculator assumptions** (`components/savings-calculator.tsx`) — `BURDEN_MULTIPLIER` (1.25) and `DELTA_FULL_STACK_PER_CASE` ($2,500) are the two constants behind the estimate.
