@@ -1,0 +1,19 @@
+import type { MetadataRoute } from 'next'
+import { SERVICES } from '@/lib/services'
+import { SITE } from '@/lib/site'
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const staticPages = ['', '/services', '/cost-recovery', '/savings-calculator', '/about', '/contact']
+  return [
+    ...staticPages.map((path) => ({
+      url: `${SITE.url}${path}`,
+      changeFrequency: 'monthly' as const,
+      priority: path === '' ? 1 : 0.8,
+    })),
+    ...SERVICES.map((s) => ({
+      url: `${SITE.url}/services/${s.slug}`,
+      changeFrequency: 'monthly' as const,
+      priority: 0.9,
+    })),
+  ]
+}

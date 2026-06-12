@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "delta-litigation-support",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "-p", "3100"],
+      "cwd": "/Users/eliplotkin/Desktop/Projects/delta-litigation-support",
+      "port": 3100
+    }
+  ]
+}
