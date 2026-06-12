@@ -5,8 +5,7 @@ export const SITE = {
     'Delta Litigation Support helps plaintiff law firms reduce overhead, improve case progression, and scale operations through a complete suite of litigation support services — from intake through settlement.',
   // TODO: replace with the production domain before launch
   url: 'https://deltalitigationsupport.com',
-  // TODO: replace with the real intake address before launch
-  contactEmail: 'hello@deltalitigationsupport.com',
+  contactEmail: 'LP@deltalegalfunding.com',
   parentBrand: 'Delta Legal Funding',
   parentUrl: 'https://deltalegalfunding.com',
 }
