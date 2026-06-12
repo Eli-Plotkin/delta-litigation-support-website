@@ -30,20 +30,20 @@ lib/
 
 ## Environment
 
-The assessment form posts to `app/api/assessment/route.ts`, which emails submissions via Resend. Copy `.env.example` to `.env.local` (and mirror in Vercel) and set:
+The assessment form posts to `app/api/assessment/route.ts`, which emails submissions via Gmail SMTP (nodemailer). Copy `.env.example` to `.env.local` (and mirror in Vercel) and set:
 
 ```
-RESEND_API_KEY           # server-only — from resend.com/api-keys
-ASSESSMENT_TO_EMAIL      # inbox that receives form submissions
-NOTIFICATION_FROM_EMAIL  # "Name <email>" on a Resend-verified domain; omit for onboarding@resend.dev (testing)
+GMAIL_USER           # Gmail address that sends the notifications
+GMAIL_APP_PASSWORD   # App Password — myaccount.google.com/apppasswords (requires 2-Step Verification)
+ASSESSMENT_TO_EMAIL  # optional — inbox that receives submissions; defaults to GMAIL_USER
 ```
 
-Without these set, the route returns 503 and the form shows a direct-email fallback.
+Without these set, the route returns 503 and the form shows a direct-email fallback. (The site previously used Resend — restore from git history if branded-domain sending is ever needed.)
 
 ## Before launch
 
 1. **`lib/site.ts`** — replace `url` and `contactEmail` with production values.
-2. **Email delivery** — set the env vars above; verify the sending domain in Resend for production.
+2. **Email delivery** — set the env vars above and send one test submission end-to-end.
 3. **Cost Recovery page** (`app/cost-recovery/page.tsx`) — have counsel review the copy before launch, per the website strategy doc.
 4. **Calculator assumptions** (`components/savings-calculator.tsx`) — `BURDEN_MULTIPLIER` (1.25) and `DELTA_FULL_STACK_PER_CASE` ($2,500) are the two constants behind the estimate.
 5. **Testimonials** — intentionally omitted until real client quotes are approved (targets per strategy doc: PMR, Edward Law Group, Bush & Bush, Kelly Law).

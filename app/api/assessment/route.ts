@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
 // Best-effort per-IP rate limit. In-memory state resets on serverless cold
-// starts, which is acceptable for a lead form — Resend's own limits backstop it.
+// starts, which is acceptable for a lead form — Gmail's own limits backstop it.
 const submissions = new Map<string, number[]>()
 const WINDOW_MS = 60 * 60 * 1000
 const MAX_PER_WINDOW = 5
@@ -20,14 +20,16 @@ const MAX_FIELD = 200
 const MAX_MESSAGE = 5000
 
 export async function POST(request: Request) {
-  const apiKey = process.env.RESEND_API_KEY
-  const to = process.env.ASSESSMENT_TO_EMAIL
-  if (!apiKey || !to) {
+  const user = process.env.GMAIL_USER
+  // App passwords are often copied with spaces ("abcd efgh ijkl mnop") — strip them.
+  const pass = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, '')
+  if (!user || !pass) {
     return NextResponse.json(
       { error: 'Email delivery is not configured.' },
       { status: 503 }
     )
   }
+  const to = process.env.ASSESSMENT_TO_EMAIL || user
 
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
   if (rateLimited(ip)) {
@@ -63,30 +65,33 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 })
   }
 
-  const resend = new Resend(apiKey)
-  const { error } = await resend.emails.send({
-    from: process.env.NOTIFICATION_FROM_EMAIL ?? 'Delta Litigation Support <onboarding@resend.dev>',
-    to,
-    replyTo: email,
-    subject: `Assessment request — ${firm}`,
-    text: [
-      `Name: ${name}`,
-      `Firm: ${firm}`,
-      `Email: ${email}`,
-      `Phone: ${phone || '—'}`,
-      `New cases per month: ${volume || '—'}`,
-      '',
-      'Biggest operational bottleneck:',
-      message || '—',
-    ].join('\n'),
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: { user, pass },
   })
 
-  if (error) {
-    console.error('Resend error:', error)
-    return NextResponse.json(
-      { error: 'We couldn’t send your request.' },
-      { status: 502 }
-    )
+  try {
+    await transporter.sendMail({
+      from: `"Delta Litigation Support" <${user}>`,
+      to,
+      replyTo: email,
+      subject: `Assessment request — ${firm}`,
+      text: [
+        `Name: ${name}`,
+        `Firm: ${firm}`,
+        `Email: ${email}`,
+        `Phone: ${phone || '—'}`,
+        `New cases per month: ${volume || '—'}`,
+        '',
+        'Biggest operational bottleneck:',
+        message || '—',
+      ].join('\n'),
+    })
+  } catch (error) {
+    console.error('Gmail SMTP error:', error)
+    return NextResponse.json({ error: 'We couldn’t send your request.' }, { status: 502 })
   }
 
   return NextResponse.json({ ok: true })
