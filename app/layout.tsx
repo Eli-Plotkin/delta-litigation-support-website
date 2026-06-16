@@ -3,6 +3,7 @@ import { Archivo, IBM_Plex_Mono, Instrument_Serif } from 'next/font/google'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { SITE } from '@/lib/site'
+import { Analytics } from "@vercel/analytics/next"
 import './globals.css'
 
 const archivo = Archivo({
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         <main>{children}</main>
         <SiteFooter />
+        <Analytics />
       </body>
     </html>
   )
