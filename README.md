@@ -2,7 +2,7 @@
 
 Marketing website for Delta Litigation Support, the litigation support arm of Delta Legal Funding. White-labeled pre-litigation operations for plaintiff personal injury firms.
 
-See [deltalit.com](deltalit.com)
+See [deltalit.com](https://www.deltalit.com/)
 
 **Stack:** Next.js (App Router) · TypeScript · Tailwind CSS 4
 
