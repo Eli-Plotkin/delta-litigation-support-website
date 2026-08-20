@@ -8,8 +8,6 @@ See [deltalit.com](https://www.deltalit.com/)
 
 ## Architecture
 
-## Architecture
-
 The website uses the Next.js App Router as a full-stack application framework.
 
 - Static/server-rendered marketing pages for fast loads and SEO
