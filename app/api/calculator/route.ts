@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server'
 
-// Per-case service fees. Server-only on purpose: pricing isn't finalized, so
-// these must never ship in a client bundle. Keep in sync with the service
-// keys in components/savings-calculator.tsx.
 const FEES: Record<string, number> = {
   intake: 150,
   treatment: 400,
