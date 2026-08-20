@@ -20,7 +20,7 @@ npm run start    # serve production build
 app/
   page.tsx                  # Homepage
   services/                 # Services index + 7 SEO service pages (driven by lib/services.ts)
-  cost-recovery/            # Cost recovery framework (carefully-worded — review with counsel)
+  cost-recovery/            # Cost recovery framework
   savings-calculator/       # Interactive payroll vs. Delta model calculator
   about/                    # Mission page
   contact/                  # 15-minute operational assessment form
