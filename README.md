@@ -1,10 +1,43 @@
 # Delta Litigation Support — Marketing Site
 
-Marketing website for Delta Litigation Support, the litigation support arm of Delta Legal Funding. White-labeled pre-litigation operations for plaintiff personal injury firms.
+Marketing website for Delta Litigation Support, the litigation support arm of Delta Legal Funding. Built as a full-stack Next.js application with static-first marketing pages, data-driven service routes, server-side lead capture, and private server-side calculator logic.
 
 See [deltalit.com](https://www.deltalit.com/)
 
 **Stack:** Next.js (App Router) · TypeScript · Tailwind CSS 4
+
+## Architecture
+
+## Architecture
+
+The website uses the Next.js App Router as a full-stack application framework.
+
+- Static/server-rendered marketing pages for fast loads and SEO
+- Backend API routes for lead capture and private calculator pricing
+- Dynamic service pages generated from a centralized `SERVICES` data model
+- Client components only where browser interactivity is required
+
+## Data-Driven Content Model
+
+Seven service pages are generated from `lib/services.ts`. Each service defines its slug, metadata, deliverables, benefits, stage, and objective in one place. The dynamic route at `app/services/[slug]/page.tsx` uses this source of truth to generate static pages and SEO metadata.
+
+## Private Server-Side Calculations
+
+Savings calculator keeps public assumptions in the client component while private per-case service fees live in `app/api/calculator/route.ts`.
+
+The browser sends case volume and selected services to the API route, and the server returns the computed estimate. This keeps unpublished pricing out of the client JavaScript bundle.
+
+## SEO & Deployment
+
+The app includes global metadata, per-page metadata, dynamic service metadata, a generated sitemap, and robots configuration. It is designed for Vercel deployment with environment-specific email credentials.
+
+## Production Considerations
+
+- Server-only environment variables for email credentials
+- Honeypot field to reduce bot submissions
+- Lightweight per-IP rate limiting on lead form submissions
+- Graceful fallback when email delivery is not configured
+- Private calculator fee assumptions kept out of client-side code
 
 ## Commands
 
@@ -18,15 +51,22 @@ npm run start    # serve production build
 
 ```
 app/
+  layout.tsx                # Root layout, global metadata, fonts, header/footer, analytics
   page.tsx                  # Homepage
   services/                 # Services index + 7 SEO service pages (driven by lib/services.ts)
   cost-recovery/            # Cost recovery framework
   savings-calculator/       # Interactive payroll vs. Delta model calculator
+  attorney-funding/         # Attorney funding service page
   about/                    # Mission page
   contact/                  # 15-minute operational assessment form
+  api/
+    assessment/route.ts     # Server-side lead form endpoint; sends email through Gmail SMTP
+    calculator/route.ts     # Server-side calculator pricing endpoint
+  sitemap.ts                # Sitemap generated from SITE + SERVICES
+  robots.ts                 # Robots policy + sitemap URL
 components/                 # Header, footer, calculator, form, icons, reveal animations
 lib/
-  site.ts                   # Site constants — UPDATE contactEmail + url before launch
+  site.ts                   # Site constants
   services.ts               # Single source of truth for the seven service disciplines
 ```
 
